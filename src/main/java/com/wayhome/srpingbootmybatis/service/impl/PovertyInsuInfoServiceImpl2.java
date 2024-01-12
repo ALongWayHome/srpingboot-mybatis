@@ -1,0 +1,208 @@
+package com.wayhome.srpingbootmybatis.service.impl;
+
+import com.wayhome.srpingbootmybatis.dto.PovertyInsuInfoRosterDTO;
+import com.wayhome.srpingbootmybatis.exception.CustomerException;
+import com.wayhome.srpingbootmybatis.mapper.PovertyInsuInfoRosterMapper;
+import com.wayhome.srpingbootmybatis.service.PovertyInsuInfoRosterService;
+import com.wayhome.srpingbootmybatis.utils.CSVWriteUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
+import java.net.URLEncoder;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
+@Slf4j
+@Service
+public class PovertyInsuInfoServiceImpl2 implements PovertyInsuInfoRosterService {
+
+    //脱贫人口的codes
+    private final static List<String> offPovertyCodes = Arrays.asList("236027", "236021", "236022", "236026", "236024");
+    private final static int OFF_POVERTY_TYPE = 1;
+
+    private final static Map<Integer, List<String>> typeMap = new HashMap<Integer, List<String>>() {{
+        put(OFF_POVERTY_TYPE, offPovertyCodes);
+    }};
+
+    private final static Long DEFAULT_LIMIT_SIZE = 10000L;
+
+    @Resource
+    private PovertyInsuInfoRosterMapper povertyInsuInfoRosterMapper;
+
+    /**
+     * <p>
+     * 因为不确定要导出数据的大小，所以使用csv
+     * Excel 07-2003 支持的最大行数是65536行
+     * Excel2013版 支持的最大行数是1048576行
+     * <p>
+     * 数据量大的话可能会导致内存溢出，要防止这种情况出现，需要分成好多次生成文本，然后将查询出来的数据clear，释放内存
+     * </p>
+     */
+    @Override
+    public void export(Integer exportType, String areaCode, String countyCode, String townCode, HttpServletResponse response) throws IllegalAccessException {
+
+        if (!typeMap.containsKey(exportType)) {
+            log.info("导出的类型不正确");
+            throw new CustomerException("导出的类型不正确");
+        }
+        long count = povertyInsuInfoRosterMapper.getCountPoverInsuInfo(typeMap.get(exportType), areaCode, countyCode, townCode);
+        if (count <= 0) {
+            return;
+        }
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        System.out.println("----导出开始----------------------------->" + LocalDateTime.now().format(dateTimeFormatter));
+        //设置表头
+        AtomicInteger columnSize = new AtomicInteger(0);
+        String title = CSVWriteUtils.getTitle(PovertyInsuInfoRosterDTO.class, new ArrayList<>(), columnSize);
+        PrintWriter writer = null;
+        try {
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("content-disposition", "attachment; filename=" + URLEncoder.encode("export.csv", "UTF-8"));
+            writer = response.getWriter();
+            writer.write(title);
+
+
+            List<String> stringList = new CopyOnWriteArrayList<>();
+            Map<Integer, String> map = new ConcurrentHashMap<>();
+            BlockingQueue<String> blockingQueue = new ArrayBlockingQueue<String>(100);
+            AtomicBoolean atomicBoolean = new AtomicBoolean(true);
+            if (count > DEFAULT_LIMIT_SIZE) {
+                int threadNum = (int) (count / DEFAULT_LIMIT_SIZE);
+                if (count % DEFAULT_LIMIT_SIZE > 0) threadNum += 1;
+                CountDownLatch countDownLatch = new CountDownLatch(threadNum);
+                ExecutorService executorService = Executors.newFixedThreadPool(threadNum);
+                for (int i = 0; i < threadNum; i++) {
+                    final int pageSize = i;
+                    executorService.submit(() -> {
+                        try {
+                            String row = queryPovertyPsnRosterTask(typeMap.get(exportType), areaCode, countyCode, townCode, pageSize, columnSize.get());
+//                        stringList.add(row);
+//                        map.put(pageSize, row);
+                            blockingQueue.put(row);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            countDownLatch.countDown();
+                            if (countDownLatch.getCount() == 0) {
+                                atomicBoolean.set(false);
+                            }
+                        }
+                    });
+                }
+                while (atomicBoolean.get()) {
+                    writer.write(blockingQueue.take());
+                }
+                try {
+                    countDownLatch.await();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    executorService.shutdown();
+                }
+//            writerCsv(response, stringList, title);
+//            writerCsv(response, map, title);
+            } else {
+                List<PovertyInsuInfoRosterDTO> list = povertyInsuInfoRosterMapper.getListByMatIdetCode(offPovertyCodes, areaCode, countyCode, townCode);
+                String row = setCsvRow(list, columnSize.get());
+                String content = title + row;
+                writerCsv(response, content);
+            }
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH:mm:ss");
+            writer.write("统计日期截止到：" + LocalDateTime.now().format(formatter));
+            writer.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.info(e.getMessage());
+        } finally {
+            if (writer != null) {
+                writer.close();
+            }
+        }
+        System.out.println("----查询数据结束，开始写csv----------------------------->" + LocalDateTime.now().format(dateTimeFormatter));
+    }
+
+    private void writerCsv(HttpServletResponse response,
+//                           List<String> list,
+//                           Map<Integer,String> map,
+                           BlockingQueue<String> blockingQueue,
+                           String title) {
+        PrintWriter writer = null;
+        try {
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("content-disposition", "attachment; filename=" + URLEncoder.encode("export.csv", "UTF-8"));
+            writer = response.getWriter();
+            writer.write(title);
+//            for (String row : list) {
+//                writer.write(row);
+//            }
+//            for (String row : map.values()){
+//                writer.write(row);
+//            }
+            writer.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.info(e.getMessage());
+        } finally {
+            if (writer != null) {
+                writer.close();
+            }
+        }
+        System.out.println("----查询数据结束，写csv结束----------------------------->" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+    }
+
+    private void writerCsv(HttpServletResponse response, String content) {
+        PrintWriter writer = null;
+        try {
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("content-disposition", "attachment; filename=" + URLEncoder.encode("export.csv", "UTF-8"));
+            writer = response.getWriter();
+            writer.write(content);
+            writer.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.info(e.getMessage());
+        } finally {
+            if (writer != null) {
+                writer.close();
+            }
+        }
+        System.out.println("----查询数据结束，写csv结束----------------------------->" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+    }
+
+
+    //分批次查询数据，将数据生成字符串后清楚list，大list可能直接进入老年代，手动clear来释放内存
+    private String queryPovertyPsnRosterTask(List<String> codes, String areaCode, String countyCode, String townCode, int pageSize, int columnSize) throws IllegalAccessException {
+        long limit = pageSize * DEFAULT_LIMIT_SIZE;
+        List<PovertyInsuInfoRosterDTO> list = povertyInsuInfoRosterMapper
+                .getPageByMatIdetCode(codes, areaCode, countyCode, townCode, limit, DEFAULT_LIMIT_SIZE);
+        return setCsvRow(list, columnSize);
+    }
+
+    private String setCsvRow(List<PovertyInsuInfoRosterDTO> list, int columnSize) throws IllegalAccessException {
+        //将相同的psnNo合并，并将特殊身份字符串进行拼接 类似：{psnNo='rng1001', matIdetName='脱贫不稳定人口,脱贫人口低保对象'}
+        list = new ArrayList<>(list.stream().collect(Collectors.toMap(PovertyInsuInfoRosterDTO::getPsnNo, a -> a, (o1, o2) -> {
+            if (o1.getMatIdetName() != null && !o1.getMatIdetName().equals(o2.getMatIdetName())) {
+                o1.setMatIdetName(o1.getMatIdetName() + "，" + o2.getMatIdetName());
+            }
+            return o1;
+        })).values());
+        StringBuffer row = new StringBuffer();
+        try {
+            for (PovertyInsuInfoRosterDTO dto : list){
+                row.append(dto.setExportRow());
+            }
+        } finally {
+            //help GC
+            list.clear();
+        }
+        return row.toString();
+    }
+}

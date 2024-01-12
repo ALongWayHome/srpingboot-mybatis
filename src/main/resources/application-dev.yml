@@ -1,0 +1,45 @@
+server:
+  port: 8010
+
+mybatis-plus:
+  check-config-location: true
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mybatis/mapper/*Mapper.xml
+  type-aliases-package: com.wayhome.srpingbootmybatis.entity.*
+
+
+logging:
+  level:
+    com.wayhome.srpingbootmybatis.mapper: debug
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#    username: root
+#    password: root123456
+#    url: jdbc:mysql://localhost:3306/my-test?characterEncoding=UTF8&autoReconnect=true&serverTimezone=Asia/Shanghai
+
+    url: jdbc:mysql://10.26.12.60:15004/povertyalleviation?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=GMT%2b8
+    username: fupinyong
+    password: "ylbzj00823wrmfu"
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-timeout: 60000
+      minimum-idle: 5
+      maximum-pool-size: 20
+      max-lifetime: 1800000
+      idle-timeout: 180000
+
+  redis:
+    host: 188.1.1.106
+    port: 30004
+    database: 0
+    password: ylbzj00823wrmfu
+    timeout: 5000
+
+thread:
+  pool:
+    core-size: 8
+    max-size : 20
+    queue-capacity: 50
+    name-prefix: thread-pool-

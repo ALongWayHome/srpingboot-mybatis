@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wayhome.srpingbootmybatis.mapper.PovertyInsuInfoRosterMapper">
+
+
+    <select id="getPageByMatIdetCode" resultType="com.wayhome.srpingbootmybatis.dto.PovertyInsuInfoRosterDTO">
+        SELECT
+            PSN_NO as psnNo,
+            AREA_NAME as areaName, COUNTY_NAME countyName, TOWN_NAME townName,
+            VILLAGE_NAME villageName,
+            PSN_NAME as psnName,if(GEND=1, '男', '女') as gend, CERTNO certno,
+            if(OPSP_REG_FLAG, '是', '否') opspRegFlag, MAT_IDET_NAME matIdetName
+        FROM poverty_insu_info
+        <where>
+            AND VALI_FLAG = '1'
+            <if test="areaCode != null and areaCode != ''">
+                AND AREA_CODE = #{areaCode}
+            </if>
+            <if test="countyCode != null and countyCode != ''">
+                AND COUNTY_CODE = #{countyCode}
+            </if>
+            <if test="townCode != null and townCode != ''">
+                AND TOWN_CODE = #{townCode}
+            </if>
+            AND MAT_IDET_CODE IN
+            <foreach collection="list" item="code" index="index" open="(" close=")" separator=",">
+                #{code}
+            </foreach>
+        </where>
+        order by ID ASC
+        limit #{limit},#{offset}
+    </select>
+
+    <select id="getCountPoverInsuInfo" resultType="java.lang.Long">
+        SELECT
+        count(ID)
+        FROM poverty_insu_info
+        <where>
+            AND VALI_FLAG = '1'
+            <if test="areaCode != null and areaCode != ''">
+                AND AREA_CODE = #{areaCode}
+            </if>
+            <if test="countyCode != null and countyCode != ''">
+                AND COUNTY_CODE = #{countyCode}
+            </if>
+            <if test="townCode != null and townCode != ''">
+                AND TOWN_CODE = #{townCode}
+            </if>
+            AND MAT_IDET_CODE IN
+            <foreach collection="list" item="code" index="index" open="(" close=")" separator=",">
+                #{code}
+            </foreach>
+        </where>
+    </select>
+
+    <select id="getListByMatIdetCode" resultType="com.wayhome.srpingbootmybatis.dto.PovertyInsuInfoRosterDTO">
+        SELECT
+            PSN_NO as psnNo,
+            AREA_NAME as areaName, COUNTY_NAME countyName, TOWN_NAME townName,
+            VILLAGE_NAME villageName,
+            PSN_NAME as psnName,if(GEND=1, '男', '女') as gend, CERTNO certno,
+            if(OPSP_REG_FLAG, '是', '否') opspRegFlag, MAT_IDET_NAME matIdetName
+        FROM poverty_insu_info
+        <where>
+            AND VALI_FLAG = '1'
+            <if test="areaCode != null and areaCode != ''">
+                AND AREA_CODE = #{areaCode}
+            </if>
+            <if test="countyCode != null and countyCode != ''">
+                AND COUNTY_CODE = #{countyCode}
+            </if>
+            <if test="townCode != null and townCode != ''">
+                AND TOWN_CODE = #{townCode}
+            </if>
+            AND MAT_IDET_CODE IN
+            <foreach collection="list" item="code" index="index" open="(" close=")" separator=",">
+                #{code}
+            </foreach>
+        </where>
+    </select>
+</mapper>
