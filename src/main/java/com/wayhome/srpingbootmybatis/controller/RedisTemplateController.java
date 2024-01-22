@@ -20,6 +20,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 @RequestMapping(value = "/wayhome/redisOptions/")
@@ -31,7 +33,7 @@ public class RedisTemplateController {
     @Autowired
     private JedisPool jedisPool;
 
-    @PostMapping(value = "delOpts")
+//    @PostMapping(value = "delOpts")
     public void optionRedis(@RequestParam("file") MultipartFile file) throws Exception {
         List<String> delKeyList = new ArrayList<>();
         InputStreamReader isr = new InputStreamReader(file.getInputStream());
@@ -51,7 +53,7 @@ public class RedisTemplateController {
         );
     }
 
-    @PostMapping(value = "scanAndDel")
+//    @PostMapping(value = "scanAndDel")
     public void scanAndDel() {
         Jedis jedis = jedisPool.getResource();
 //        String str = jedis.get("AMP:CFG:getOrgCfgByType::SimpleKey [H13048100255,ALI_PAY_AUTH_INFO]");
@@ -81,12 +83,38 @@ public class RedisTemplateController {
         }
     }
 
-    @PostMapping(value = "keysAndDel")
-    public void keysAndDel(){
+    @PostMapping(value = "keysAndDelCfgCache")
+    public void keysAndDelCfgCache(){
         Jedis jedis = jedisPool.getResource();
         Set<String> keys = jedis.keys("AMP:CFG*");
-        keys.forEach(System.out::println);
+        System.out.println("========AMP:CFG前缀key的数量是：" + keys.size());
+//        keys.forEach(System.out::println);
+        AtomicLong atomicLong = new AtomicLong(0);
+        keys.forEach(key -> {
+            Long del = jedis.del(key);
+            atomicLong.addAndGet(del);
+        });
+        String key = "AMP:ORG:listAllOrg::SimpleKey []";
+        Long del = jedis.del(key);
+        long delCont = atomicLong.addAndGet(del);
+        System.out.println("========redis执行删除任务成功条数是： " + delCont);
+    }
 
+    @PostMapping(value = "keysAndDelOrgCache")
+    public void keysAndDelOrgCache(){
+        Jedis jedis = jedisPool.getResource();
+        Set<String> keys = jedis.keys("AMP:ORG*");
+        System.out.println("========AMP:ORG前缀key的数量是：" + keys.size());
+//        keys.forEach(System.out::println);
+        AtomicLong atomicLong = new AtomicLong(0);
+        keys.forEach(key -> {
+            Long del = jedis.del(key);
+            atomicLong.addAndGet(del);
+        });
+        String key = "AMP:ORG:listAllOrg::SimpleKey []";
+        Long del = jedis.del(key);
+        long delCont = atomicLong.addAndGet(del);
+        System.out.println("========redis执行删除任务成功条数是： " + delCont);
     }
 
 }
