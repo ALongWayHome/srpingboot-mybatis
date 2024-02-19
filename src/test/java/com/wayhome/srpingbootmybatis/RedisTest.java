@@ -25,6 +25,5 @@ public class RedisTest {
         List<String> list = (List<String>)redisTemplate.opsForValue().get("list");
         assert list != null;
         list.forEach(System.out::println);
-
     }
 }
