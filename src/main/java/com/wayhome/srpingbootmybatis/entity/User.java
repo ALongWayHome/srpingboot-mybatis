@@ -18,6 +18,8 @@ public class User {
 
     private String username;
 
+    private String classId;
+
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private LocalDate registerDate;
 

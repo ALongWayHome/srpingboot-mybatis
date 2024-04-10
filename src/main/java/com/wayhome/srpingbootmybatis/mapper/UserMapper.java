@@ -8,5 +8,6 @@ public interface UserMapper {
 
     User getUserById(Long id);
 
+    boolean editUser(User user);
 
 }

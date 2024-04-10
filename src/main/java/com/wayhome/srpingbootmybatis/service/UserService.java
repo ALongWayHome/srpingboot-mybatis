@@ -5,4 +5,6 @@ import com.wayhome.srpingbootmybatis.entity.User;
 public interface UserService {
 
     User getUserById(Long id);
+
+    boolean editUser(User user);
 }
