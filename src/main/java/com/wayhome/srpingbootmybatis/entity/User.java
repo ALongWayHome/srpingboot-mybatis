@@ -14,7 +14,7 @@ import java.util.Map;
 @Data
 public class User {
 
-    private Long id;
+    private Integer id;
 
     private String username;
 
@@ -26,11 +26,11 @@ public class User {
 
     public static void main(String[] args) {
         User user = new User();
-        user.setId(1L);
+        user.setId(1);
         Map<String, User> map = new HashMap<>();
         map.put("user", user);
         System.out.println(JSONObject.toJSONString(map));
-        user.setId(2L);
+        user.setId(2);
         System.out.println(JSONObject.toJSONString(map));
 
     }
