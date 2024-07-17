@@ -15,10 +15,12 @@ logging:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: root123456
-    url: jdbc:mysql://localhost:3306/my-test?characterEncoding=UTF8&autoReconnect=true&serverTimezone=Asia/Shanghai
-
+#    username: root
+    username: write_user
+#    password: root123456
+    password: ylbzj00823wrmfu
+#    url: jdbc:mysql://localhost:3306/my-test?characterEncoding=UTF8&autoReconnect=true&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://10.26.17.21:15003/hibiz_db?connectTimeout=120000&socketTimeout=120000&autoReconnect=true&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
 #    url: jdbc:mysql://10.26.12.60:15004/povertyalleviation?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=GMT%2b8
 #    username: fupinyong
 #    password: "ylbzj00823wrmfu"

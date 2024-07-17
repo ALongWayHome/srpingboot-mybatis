@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wayhome.srpingbootmybatis.speacecase.dao.TldyReportFormDAO">
+
+
+    <select id="queryFixmedinsExpertTldyFormData" parameterType="com.wayhome.srpingbootmybatis.speacecase.dto.QueryTldyReportFormDTO"
+                resultType="com.wayhome.srpingbootmybatis.speacecase.dto.FixmedinExpertFormData">
+
+        select FIX_BLNG_ADMDVS as admdvs,
+                    FIXMEDINS_CODE as fixmedinsCode,
+                    FIXMEDINS_NAME as fixmedinsName,
+                    DR_CODE as drCode,
+                    any_value(DR_NAME) as drName,
+                    DEPT_MAJOR as deptMajor,
+                    count(0) as casesCnt,
+                    SUM(IF(CHK_STATUS = '0', 1 , 0)) as unauditedCasesCnt,
+                    SUM(IF(CHK_STATUS = '1', 1, 0)) as passCasesCnt,
+                    SUM(IF(CHK_STATUS = '2', 1, 0)) as unPassCasesCnt
+            from setl_tldy_expert_audit_c
+            <where>
+                VALI_FLAG = '1'
+                <if test="fixmedinsCode != null and fixmedinsCode !=''">
+                   and FIXMEDINS_CODE = #{fixmedinsCode}
+                </if>
+                <if test="drCode != null and drCode !=''">
+                    and DR_CODE = #{drCode}
+                </if>
+                <if test="startTime != null and endTime != null">
+                    and CRTE_TIME between #{startTime} and #{endTime}
+                </if>
+                <choose>
+                    <when test="admdvs == '130000'">
+                        AND FIX_BLNG_ADMDVS LIKE '13%'
+                    </when>
+                    <when test="admdvs == '130100'">
+                        AND FIX_BLNG_ADMDVS LIKE '1301%' AND FIX_BLNG_ADMDVS != '130181'
+                    </when>
+                    <when test="admdvs == '130200'">
+                        AND FIX_BLNG_ADMDVS LIKE '1302%'
+                    </when>
+                    <when test="admdvs == '130300'">
+                        AND FIX_BLNG_ADMDVS LIKE '1303%'
+                    </when>
+                    <when test="admdvs == '130400'">
+                        AND FIX_BLNG_ADMDVS LIKE '1304%'
+                    </when>
+                    <when test="admdvs == '130500'">
+                        AND FIX_BLNG_ADMDVS LIKE '1305%'
+                    </when>
+                    <when test="admdvs == '130600'">
+                        AND FIX_BLNG_ADMDVS LIKE '1306%' AND FIX_BLNG_ADMDVS != '130682'
+                    </when>
+                    <when test="admdvs == '130700'">
+                        AND FIX_BLNG_ADMDVS LIKE '1307%'
+                    </when>
+                    <when test="admdvs == '130800'">
+                        AND FIX_BLNG_ADMDVS LIKE '1308%'
+                    </when>
+                    <when test="admdvs == '130900'">
+                        AND FIX_BLNG_ADMDVS LIKE '1309%'
+                    </when>
+                    <when test="admdvs == '131000'">
+                        AND FIX_BLNG_ADMDVS LIKE '1310%'
+                    </when>
+                    <when test="admdvs == '131100'">
+                        AND FIX_BLNG_ADMDVS LIKE '1311%'
+                    </when>
+                    <when test="admdvs == '133100'">
+                        AND FIX_BLNG_ADMDVS LIKE '1331%'
+                    </when>
+                    <otherwise>
+                        AND FIX_BLNG_ADMDVS = #{admdvs}
+                    </otherwise>
+                </choose>
+            </where>
+            group by DR_CODE,FIXMEDINS_CODE,FIX_BLNG_ADMDVS,DEPT_MAJOR
+            order by casesCnt desc,drCode desc
+    </select>
+
+
+    <select id="queryFixmedinsTldyFormData"  parameterType="com.wayhome.srpingbootmybatis.speacecase.dto.QueryTldyReportFormDTO"
+            resultType="com.wayhome.srpingbootmybatis.speacecase.dto.FixmedinsFormData">
+        select
+            setl.FIXMEDINS_CODE as fixmedinsCode,
+            any_value(setl.FIXMEDINS_NAME) as fixmedinsName,
+            setl.CLR_OPTINS as admdvs,
+            count(0) as casesCnt,
+            count(expert.EXPERT_CODE) as expertCnt,
+            sum(if(setl.STATUS in ('1','2'), 1, 0)) as unauditedCasesCnt,
+            sum(if(setl.STATUS = '3' and setl.RECHECK_STATUS = '1', 1, 0)) as passCasesCnt,
+            sum(if(setl.STATUS = '3' and setl.RECHECK_STATUS = '2', 1, 0)) as unPassCasesCnt
+        from setl_tldy_d setl
+            left join fixmedins_expert_info_d expert on setl.FIXMEDINS_CODE = expert.FIXMEDINS_CODE
+            and setl.CLR_OPTINS = expert.FIX_BLNG_ADMDVS and expert.VALI_FLAG = '1' and expert.AUDIT_STATUS = '1'
+        <where>
+            setl.STATUS is not null and  setl.STATUS != '0' and setl.VALI_FLAG = '1'
+            <if test="fixmedinsCode != null and fixmedinsCode != ''">
+                and setl.FIXMEDINS_CODE = #{fixmedinsCode}
+            </if>
+            <if test="startTime != null and endTime != null">
+                and setl.CRTE_TIME between #{startTime} and #{endTime}
+            </if>
+            <choose>
+                <when test="admdvs == '130000'">
+                    AND setl.CLR_OPTINS LIKE '13%'
+                </when>
+                <when test="admdvs == '130100'">
+                    AND setl.CLR_OPTINS LIKE '1301%' AND FIX_BLNG_ADMDVS != '130181'
+                </when>
+                <when test="admdvs == '130200'">
+                    AND setl.CLR_OPTINS LIKE '1302%'
+                </when>
+                <when test="admdvs == '130300'">
+                    AND setl.CLR_OPTINS LIKE '1303%'
+                </when>
+                <when test="admdvs == '130400'">
+                    AND setl.CLR_OPTINS LIKE '1304%'
+                </when>
+                <when test="admdvs == '130500'">
+                    AND setl.CLR_OPTINS LIKE '1305%'
+                </when>
+                <when test="admdvs == '130600'">
+                    AND setl.CLR_OPTINS LIKE '1306%' AND FIX_BLNG_ADMDVS != '130682'
+                </when>
+                <when test="admdvs == '130700'">
+                    AND setl.CLR_OPTINS LIKE '1307%'
+                </when>
+                <when test="admdvs == '130800'">
+                    AND setl.CLR_OPTINS LIKE '1308%'
+                </when>
+                <when test="admdvs == '130900'">
+                    AND setl.CLR_OPTINS LIKE '1309%'
+                </when>
+                <when test="admdvs == '131000'">
+                    AND setl.CLR_OPTINS LIKE '1310%'
+                </when>
+                <when test="admdvs == '131100'">
+                    AND setl.CLR_OPTINS LIKE '1311%'
+                </when>
+                <when test="admdvs == '133100'">
+                    AND setl.CLR_OPTINS LIKE '1331%'
+                </when>
+                <otherwise>
+                    AND setl.CLR_OPTINS = #{admdvs}
+                </otherwise>
+            </choose>
+        </where>
+        group by setl.CLR_OPTINS,  setl.FIXMEDINS_CODE
+        <!--fixmedinsCode条件得改-->
+        order by casesCnt desc, fixmedinsCode desc
+    </select>
+
+    <!--choose条件得改-->
+    <select id="queryAdmdvsTldyFormData"  parameterType="com.wayhome.srpingbootmybatis.speacecase.dto.QueryTldyReportFormDTO"
+            resultType="com.wayhome.srpingbootmybatis.speacecase.dto.AdmdvsFormData">
+        select
+            CLR_OPTINS as admdvs,
+            count(0) as casesCnt,
+            count(distinct FIXMEDINS_CODE) fixmedinsCnt,
+            sum(if(STATUS in ('1','2'), 1, 0)) as unauditedCasesCnt,
+            sum(if(STATUS = '3' and RECHECK_STATUS = '1', 1, 0)) as passCasesCnt,
+            sum(if(STATUS = '3' and RECHECK_STATUS = '2', 1, 0)) as unPassCasesCnt
+        from setl_tldy_d
+        <where>
+            STATUS is not null and  STATUS != '0' and VALI_FLAG = '1'
+            <if test="fixmedinsCode != null and fixmedinsCode != ''">
+                and FIXMEDINS_CODE = #{fixmedinsCode}
+            </if>
+            <if test="startTime != null and endTime != null">
+                and CRTE_TIME between #{startTime} and #{endTime}
+            </if>
+            <choose>
+                <when test="admdvs == '130000'">
+                    AND CLR_OPTINS LIKE '13%'
+                </when>
+                <when test="admdvs == '130100'">
+                    AND CLR_OPTINS LIKE '1301%' AND CLR_OPTINS != '130181'
+                </when>
+                <when test="admdvs == '130200'">
+                    AND CLR_OPTINS LIKE '1302%'
+                </when>
+                <when test="admdvs == '130300'">
+                    AND CLR_OPTINS LIKE '1303%'
+                </when>
+                <when test="admdvs == '130400'">
+                    AND CLR_OPTINS LIKE '1304%'
+                </when>
+                <when test="admdvs == '130500'">
+                    AND CLR_OPTINS LIKE '1305%'
+                </when>
+                <when test="admdvs == '130600'">
+                    AND CLR_OPTINS LIKE '1306%' AND CLR_OPTINS != '130682'
+                </when>
+                <when test="admdvs == '130700'">
+                    AND CLR_OPTINS LIKE '1307%'
+                </when>
+                <when test="admdvs == '130800'">
+                    AND CLR_OPTINS LIKE '1308%'
+                </when>
+                <when test="admdvs == '130900'">
+                    AND CLR_OPTINS LIKE '1309%'
+                </when>
+                <when test="admdvs == '131000'">
+                    AND CLR_OPTINS LIKE '1310%'
+                </when>
+                <when test="admdvs == '131100'">
+                    AND CLR_OPTINS LIKE '1311%'
+                </when>
+                <when test="admdvs == '133100'">
+                    AND CLR_OPTINS LIKE '1331%'
+                </when>
+                <otherwise>
+                    AND CLR_OPTINS = #{admdvs}
+                </otherwise>
+            </choose>
+        </where>
+        group by CLR_OPTINS
+        order by casesCnt desc, admdvs desc
+    </select>
+
+    <select id="queryEffectiveExpertByFixBlngAdmdvs" parameterType="java.lang.String"
+            resultType="com.wayhome.srpingbootmybatis.speacecase.dto.AdmdvsExpertCntDTO">
+        select
+        FIX_BLNG_ADMDVS as admdvs,
+        count(0) as expertCnt
+        from fixmedins_expert_info_d
+        <where>
+            VALI_FLAG = '1' and AUDIT_STATUS = '1'
+            <choose>
+                <when test="fixBlngAdmdvs == '130000'">
+                    AND FIX_BLNG_ADMDVS LIKE '13%'
+                </when>
+                <when test="fixBlngAdmdvs == '130100'">
+                    AND FIX_BLNG_ADMDVS LIKE '1301%' AND FIX_BLNG_ADMDVS != '130181'
+                </when>
+                <when test="fixBlngAdmdvs == '130200'">
+                    AND FIX_BLNG_ADMDVS LIKE '1302%'
+                </when>
+                <when test="fixBlngAdmdvs == '130300'">
+                    AND FIX_BLNG_ADMDVS LIKE '1303%'
+                </when>
+                <when test="fixBlngAdmdvs == '130400'">
+                    AND FIX_BLNG_ADMDVS LIKE '1304%'
+                </when>
+                <when test="fixBlngAdmdvs == '130500'">
+                    AND FIX_BLNG_ADMDVS LIKE '1305%'
+                </when>
+                <when test="fixBlngAdmdvs == '130600'">
+                    AND FIX_BLNG_ADMDVS LIKE '1306%' AND FIX_BLNG_ADMDVS != '130682'
+                </when>
+                <when test="fixBlngAdmdvs == '130700'">
+                    AND FIX_BLNG_ADMDVS LIKE '1307%'
+                </when>
+                <when test="fixBlngAdmdvs == '130800'">
+                    AND FIX_BLNG_ADMDVS LIKE '1308%'
+                </when>
+                <when test="fixBlngAdmdvs == '130900'">
+                    AND FIX_BLNG_ADMDVS LIKE '1309%'
+                </when>
+                <when test="fixBlngAdmdvs == '131000'">
+                    AND FIX_BLNG_ADMDVS LIKE '1310%'
+                </when>
+                <when test="fixBlngAdmdvs == '131100'">
+                    AND FIX_BLNG_ADMDVS LIKE '1311%'
+                </when>
+                <when test="fixBlngAdmdvs == '133100'">
+                    AND FIX_BLNG_ADMDVS LIKE '1331%'
+                </when>
+                <otherwise>
+                    AND FIX_BLNG_ADMDVS = #{fixBlngAdmdvs}
+                </otherwise>
+            </choose>
+        </where>
+        group by FIX_BLNG_ADMDVS
+    </select>
+</mapper>
