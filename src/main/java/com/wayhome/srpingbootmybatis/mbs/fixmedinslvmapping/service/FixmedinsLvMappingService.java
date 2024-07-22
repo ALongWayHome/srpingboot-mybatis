@@ -1,4 +1,4 @@
-package com.wayhome.srpingbootmybatis.mbs.service;
+package com.wayhome.srpingbootmybatis.mbs.fixmedinslvmapping.service;
 
 import com.wayhome.srpingbootmybatis.config.ApiResult;
 import com.wayhome.srpingbootmybatis.mbs.dto.ImportExpertResult;

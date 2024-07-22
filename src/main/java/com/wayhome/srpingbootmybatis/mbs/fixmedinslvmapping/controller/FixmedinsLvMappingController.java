@@ -1,7 +1,7 @@
-package com.wayhome.srpingbootmybatis.mbs.controller;
+package com.wayhome.srpingbootmybatis.mbs.fixmedinslvmapping.controller;
 
 import com.wayhome.srpingbootmybatis.config.ApiResult;
-import com.wayhome.srpingbootmybatis.mbs.service.FixmedinsLvMappingService;
+import com.wayhome.srpingbootmybatis.mbs.fixmedinslvmapping.service.FixmedinsLvMappingService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

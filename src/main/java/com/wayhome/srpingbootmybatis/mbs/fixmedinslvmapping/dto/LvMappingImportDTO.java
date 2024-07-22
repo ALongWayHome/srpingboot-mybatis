@@ -1,4 +1,4 @@
-package com.wayhome.srpingbootmybatis.mbs.dto;
+package com.wayhome.srpingbootmybatis.mbs.fixmedinslvmapping.dto;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;

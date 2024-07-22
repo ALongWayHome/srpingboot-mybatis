@@ -1,7 +1,6 @@
-package com.wayhome.srpingbootmybatis.mbs.dao;
+package com.wayhome.srpingbootmybatis.mbs.fixmedinslvmapping.dao;
 
-import com.wayhome.srpingbootmybatis.mbs.dto.FixmedinsLvMappingDTO;
-import com.wayhome.srpingbootmybatis.mbs.dto.LvMappingImportDTO;
+import com.wayhome.srpingbootmybatis.mbs.fixmedinslvmapping.dto.FixmedinsLvMappingDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

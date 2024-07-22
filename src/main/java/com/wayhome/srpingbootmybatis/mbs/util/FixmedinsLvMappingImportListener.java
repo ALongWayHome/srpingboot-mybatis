@@ -2,8 +2,8 @@ package com.wayhome.srpingbootmybatis.mbs.util;
 
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
-import com.wayhome.srpingbootmybatis.mbs.dto.FixmedinsLvMappingDTO;
-import com.wayhome.srpingbootmybatis.mbs.dto.LvMappingImportDTO;
+import com.wayhome.srpingbootmybatis.mbs.fixmedinslvmapping.dto.FixmedinsLvMappingDTO;
+import com.wayhome.srpingbootmybatis.mbs.fixmedinslvmapping.dto.LvMappingImportDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;

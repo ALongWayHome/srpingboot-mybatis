@@ -1,12 +1,12 @@
-package com.wayhome.srpingbootmybatis.mbs.service.impl;
+package com.wayhome.srpingbootmybatis.mbs.fixmedinslvmapping.service.impl;
 
 import com.alibaba.excel.EasyExcel;
 import com.wayhome.srpingbootmybatis.config.ApiResult;
-import com.wayhome.srpingbootmybatis.mbs.dao.FixmedinsLvMappingDao;
-import com.wayhome.srpingbootmybatis.mbs.dto.ExpertTemplate;
-import com.wayhome.srpingbootmybatis.mbs.dto.FixmedinsLvMappingDTO;
-import com.wayhome.srpingbootmybatis.mbs.dto.LvMappingImportDTO;
-import com.wayhome.srpingbootmybatis.mbs.service.FixmedinsLvMappingService;
+import com.wayhome.srpingbootmybatis.mbs.fixmedinslvmapping.bo.FixmedinsLvMappingBO;
+import com.wayhome.srpingbootmybatis.mbs.fixmedinslvmapping.dao.FixmedinsLvMappingDao;
+import com.wayhome.srpingbootmybatis.mbs.fixmedinslvmapping.dto.FixmedinsLvMappingDTO;
+import com.wayhome.srpingbootmybatis.mbs.fixmedinslvmapping.dto.LvMappingImportDTO;
+import com.wayhome.srpingbootmybatis.mbs.fixmedinslvmapping.service.FixmedinsLvMappingService;
 import com.wayhome.srpingbootmybatis.mbs.util.FixmedinsLvMappingImportListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ import java.util.List;
 public class FixmedinsLvMappingServiceImpl implements FixmedinsLvMappingService {
 
     @Resource
-    private FixmedinsLvMappingDao fixmedinsLvMappingDao;
+    private FixmedinsLvMappingBO fixmedinsLvMappingBO;
 
     @Override
     public ApiResult<Boolean> importMappingData(MultipartFile file) throws Exception {
@@ -43,7 +43,7 @@ public class FixmedinsLvMappingServiceImpl implements FixmedinsLvMappingService 
         }
         //测试完这个要注释掉
         list = Collections.singletonList(list.get(0));
-        int result = fixmedinsLvMappingDao.batchInsertData(list);
-        return ApiResult.success(result > 0);
+        Boolean result = fixmedinsLvMappingBO.importMappingData(list);
+        return ApiResult.success(result);
     }
 }
