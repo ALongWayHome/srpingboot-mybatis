@@ -1,9 +1,8 @@
-package com.wayhome.srpingbootmybatis.mbs.controller;
+package com.wayhome.srpingbootmybatis.mbs.expertimport.controller;
 
 import com.wayhome.srpingbootmybatis.config.ApiResult;
-import com.wayhome.srpingbootmybatis.mbs.dto.ImportExpertResult;
-import com.wayhome.srpingbootmybatis.mbs.service.FixmedinsExpertService;
-import io.swagger.annotations.Api;
+import com.wayhome.srpingbootmybatis.mbs.expertimport.dto.ImportExpertResult;
+import com.wayhome.srpingbootmybatis.mbs.expertimport.service.FixmedinsExpertService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

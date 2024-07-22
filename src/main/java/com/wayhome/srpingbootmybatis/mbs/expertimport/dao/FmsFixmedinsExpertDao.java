@@ -1,7 +1,7 @@
-package com.wayhome.srpingbootmybatis.mbs.dao;
+package com.wayhome.srpingbootmybatis.mbs.expertimport.dao;
 
-import com.wayhome.srpingbootmybatis.mbs.dto.FmsFixmedinsExpert;
-import com.wayhome.srpingbootmybatis.mbs.dto.QFmsFixmedinsExpertDTO;
+import com.wayhome.srpingbootmybatis.mbs.expertimport.dto.FmsFixmedinsExpert;
+import com.wayhome.srpingbootmybatis.mbs.expertimport.dto.QFmsFixmedinsExpertDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

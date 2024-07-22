@@ -1,7 +1,6 @@
 package com.wayhome.srpingbootmybatis.mbs.fixmedinslvmapping.service;
 
 import com.wayhome.srpingbootmybatis.config.ApiResult;
-import com.wayhome.srpingbootmybatis.mbs.dto.ImportExpertResult;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface FixmedinsLvMappingService {

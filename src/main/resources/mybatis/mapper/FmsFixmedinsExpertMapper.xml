@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wayhome.srpingbootmybatis.mbs.dao.FmsFixmedinsExpertDao">
+<mapper namespace="com.wayhome.srpingbootmybatis.mbs.expertimport.dao.FmsFixmedinsExpertDao">
     <sql id="BASE_COLUMN">
         EXPERT_CODE as expertCode
         ,FIXMEDINS_CODE as fixmedinsCode
@@ -39,8 +39,8 @@
         delete from fixmedins_expert_info_d where EXPERT_CODE = #{expertCode} and FIXMEDINS_CODE = #{fixmedinsCode}
     </delete>
 
-    <select id="queryFixmedisExpertDetailByUk" parameterType="com.wayhome.srpingbootmybatis.mbs.dto.QFmsFixmedinsExpertDTO"
-        resultType="com.wayhome.srpingbootmybatis.mbs.dto.FmsFixmedinsExpert">
+    <select id="queryFixmedisExpertDetailByUk" parameterType="com.wayhome.srpingbootmybatis.mbs.expertimport.dto.QFmsFixmedinsExpertDTO"
+        resultType="com.wayhome.srpingbootmybatis.mbs.expertimport.dto.FmsFixmedinsExpert">
         select <include refid="BASE_COLUMN"/>
         from fixmedins_expert_info_d
         <where>
@@ -51,8 +51,8 @@
         </where>
     </select>
 
-    <select id="queryFixmedisExpertDetailByPk" parameterType="com.wayhome.srpingbootmybatis.mbs.dto.QFmsFixmedinsExpertDTO"
-            resultType="com.wayhome.srpingbootmybatis.mbs.dto.FmsFixmedinsExpert">
+    <select id="queryFixmedisExpertDetailByPk" parameterType="com.wayhome.srpingbootmybatis.mbs.expertimport.dto.QFmsFixmedinsExpertDTO"
+            resultType="com.wayhome.srpingbootmybatis.mbs.expertimport.dto.FmsFixmedinsExpert">
         select <include refid="BASE_COLUMN"/>
         from fixmedins_expert_info_d
         <where>
@@ -61,7 +61,7 @@
         </where>
     </select>
 
-    <select id="queryPage" parameterType="com.wayhome.srpingbootmybatis.mbs.dto.QFmsFixmedinsExpertDTO" resultType="com.wayhome.srpingbootmybatis.mbs.dto.FmsFixmedinsExpert">
+    <select id="queryPage" parameterType="com.wayhome.srpingbootmybatis.mbs.expertimport.dto.QFmsFixmedinsExpertDTO" resultType="com.wayhome.srpingbootmybatis.mbs.expertimport.dto.FmsFixmedinsExpert">
         select <include refid="BASE_COLUMN"/>
         from fixmedins_expert_info_d
         <where>
@@ -169,7 +169,7 @@
 
     </insert>
 
-    <update id="updateExpertPhone" parameterType="com.wayhome.srpingbootmybatis.mbs.dto.FmsFixmedinsExpert">
+    <update id="updateExpertPhone" parameterType="com.wayhome.srpingbootmybatis.mbs.expertimport.dto.FmsFixmedinsExpert">
         update fixmedins_expert_info_d
         <set>
             PHONE = #{phone}
@@ -179,8 +179,8 @@
 
 
 
-    <select id="queryTldyExpertIdByMaJob" parameterType="com.wayhome.srpingbootmybatis.mbs.dto.FmsFixmedinsExpert"
-            resultType="com.wayhome.srpingbootmybatis.mbs.dto.FmsFixmedinsExpert">
+    <select id="queryTldyExpertIdByMaJob" parameterType="com.wayhome.srpingbootmybatis.mbs.expertimport.dto.FmsFixmedinsExpert"
+            resultType="com.wayhome.srpingbootmybatis.mbs.expertimport.dto.FmsFixmedinsExpert">
         select <include refid="BASE_COLUMN"/>
         from fixmedins_expert_info_d
         <where>
