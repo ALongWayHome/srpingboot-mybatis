@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wayhome.srpingbootmybatis.mbs.dao.FixmedinsLvMappingDao">
+
+    <insert id="batchInsertData" parameterType="list">
+        insert into fixmedins_lv_mapping_d
+            (FIXMEDINS_CODE,
+             FIXMEDINS_NAME,
+             FIX_BLNG_ADMDVS,
+             HOSP_LV,
+             SETL_LV,
+             VALI_FLAG,
+             CRTE_TIME,
+             UPDT_TIME
+            ) values
+        <foreach collection="list" item="item" index="index"  separator=",">
+            (
+            #{item.fixmedinsCode},
+            #{item.fixmedinsName},
+            #{item.fixBlngAdmdvs},
+            #{item.hospLv},
+            #{item.setlLv},
+            #{item.valiFlag},
+            #{item.crteTime},
+            #{item.updtTime}
+            )
+        </foreach>
+    </insert>
+</mapper>

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wayhome.srpingbootmybatis.mbs.dao.FmsFixmedinsExpertDao">
+    <sql id="BASE_COLUMN">
+        EXPERT_CODE as expertCode
+        ,FIXMEDINS_CODE as fixmedinsCode
+        ,FIX_BLNG_ADMDVS as fixBlngAdmdvs
+        ,FIXMEDINS_NAME as fixmedinsName
+        ,HOSP_LV as hospLv
+        ,DR_CODE as drCode
+        ,DR_NAME as drName
+        ,PSN_NO as psnNo
+        ,PSN_CERT_TYPE as psnCertType
+        ,CERTNO as certNo
+        ,DEPT_NO as deptNo
+        ,DEPT_NAME as deptName
+        ,CATY as caty
+        ,CATY_NAME as catyName
+        ,DEPT_MAJOR as deptMajor
+        ,DR_PRAC_TYPE as drPracType
+        ,DR_PRAC_SCP_CODE as drPracScpCode
+        ,DR_PRAC_SCP_NAME as drPracScpName
+        ,DR_PRO_TECH_DUTY as drProTechDuty
+        ,DR_PRO_TECH_DUTY_NAME as drProTechDutyName
+        ,DR_PRAC_LV as drPracLv
+        ,AUDIT_STATUS as auditStatus
+        ,AUDIT_MSG as auditMsg
+        ,ASSIGN_FLAG as assignFlag
+        ,VALI_FLAG as valiFlag
+        ,PHONE as phone
+        ,MEMO as memo
+        ,UPDT_TIME as updtTime
+        ,CRTER_ID as crterId
+        ,CRTER_NAME as crterName
+        ,CRTE_TIME as crteTime
+    </sql>
+
+    <delete id="deleteExpertInfoByPk">
+        delete from fixmedins_expert_info_d where EXPERT_CODE = #{expertCode} and FIXMEDINS_CODE = #{fixmedinsCode}
+    </delete>
+
+    <select id="queryFixmedisExpertDetailByUk" parameterType="com.wayhome.srpingbootmybatis.mbs.dto.QFmsFixmedinsExpertDTO"
+        resultType="com.wayhome.srpingbootmybatis.mbs.dto.FmsFixmedinsExpert">
+        select <include refid="BASE_COLUMN"/>
+        from fixmedins_expert_info_d
+        <where>
+            and FIXMEDINS_CODE = #{fixmedinsCode}
+            and FIX_BLNG_ADMDVS = #{fixBlngAdmdvs}
+            and DR_CODE = #{drCode}
+            and DEPT_MAJOR = #{deptMajor}
+        </where>
+    </select>
+
+    <select id="queryFixmedisExpertDetailByPk" parameterType="com.wayhome.srpingbootmybatis.mbs.dto.QFmsFixmedinsExpertDTO"
+            resultType="com.wayhome.srpingbootmybatis.mbs.dto.FmsFixmedinsExpert">
+        select <include refid="BASE_COLUMN"/>
+        from fixmedins_expert_info_d
+        <where>
+            and EXPERT_CODE = #{expertCode}
+            and FIXMEDINS_CODE = #{fixmedinsCode}
+        </where>
+    </select>
+
+    <select id="queryPage" parameterType="com.wayhome.srpingbootmybatis.mbs.dto.QFmsFixmedinsExpertDTO" resultType="com.wayhome.srpingbootmybatis.mbs.dto.FmsFixmedinsExpert">
+        select <include refid="BASE_COLUMN"/>
+        from fixmedins_expert_info_d
+        <where>
+            FIXMEDINS_CODE = #{fixmedinsCode}
+            <if test="fixBlngAdmdvs != null and fixBlngAdmdvs != ''">
+               AND FIX_BLNG_ADMDVS = #{fixBlngAdmdvs}
+            </if>
+            <if test="drName != null and drName != ''">
+                AND DR_NAME like concat(#{drName},"%")
+            </if>
+            <if test="drCode != null and drCode != ''">
+                AND DR_CODE = #{drCode}
+            </if>
+            <if test="certNo != null and certNo != ''">
+                AND CERTNO = #{certNo}
+            </if>
+            <if test="drPracScpCode != null and drPracScpCode != ''">
+                AND DR_PRAC_SCP_CODE = #{drPracScpCode}
+            </if>
+            <if test="auditStatus != null and auditStatus != ''">
+                AND AUDIT_STATUS = #{auditStatus}
+            </if>
+            <if test="deptMajor != null and deptMajor != ''">
+                and DEPT_MAJOR = #{deptMajor}
+            </if>
+            <if test="assignFlag != null and assignFlag != ''">
+                and ASSIGN_FLAG = #{assignFlag}
+            </if>
+            <if test="valiFlag != null and valiFlag != ''">
+                and VALI_FLAG = #{valiFlag}
+            </if>
+        </where>
+        order by EXPERT_CODE desc
+    </select>
+
+
+    <insert id="batchSaveFmsFixmedinsExpert" parameterType="java.util.List">
+        insert into fixmedins_expert_info_d
+        (EXPERT_CODE,
+        FIXMEDINS_CODE,
+        FIX_BLNG_ADMDVS,
+        FIXMEDINS_NAME,
+        HOSP_LV,
+        DR_CODE,
+        DR_NAME,
+        PSN_NO,
+        PSN_CERT_TYPE,
+        CERTNO,
+        PHONE,
+        DEPT_NO,
+        DEPT_NAME,
+        CATY,
+        CATY_NAME,
+        DEPT_MAJOR,
+        ASSIGN_FLAG,
+        DR_PRAC_TYPE,
+        DR_PRAC_SCP_CODE,
+        DR_PRAC_SCP_NAME,
+        DR_PRO_TECH_DUTY,
+        DR_PRO_TECH_DUTY_NAME,
+        DR_PRAC_LV,
+        AUDIT_STATUS,
+        AUDIT_MSG,
+        VALI_FLAG,
+        MEMO,
+        UPDT_TIME,
+        CRTER_ID,
+        CRTER_NAME,
+        CRTE_TIME)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.expertCode},
+            #{item.fixmedinsCode},
+            #{item.fixBlngAdmdvs},
+            #{item.fixmedinsName},
+            #{item.hospLv},
+            #{item.drCode},
+            #{item.drName},
+            #{item.psnNo},
+            #{item.psnCertType},
+            #{item.certNo},
+            #{item.phone},
+            #{item.deptNo},
+            #{item.deptName},
+            #{item.caty},
+            #{item.catyName},
+             #{item.deptMajor},
+             #{item.assignFlag},
+            #{item.drPracType},
+            #{item.drPracScpCode},
+            #{item.drPracScpName},
+            #{item.drProTechDuty},
+            #{item.drProTechDutyName},
+            #{item.drPracLv},
+            #{item.auditStatus},
+            #{item.auditMsg},
+            #{item.valiFlag},
+            #{item.memo},
+            #{item.updtTime},
+            #{item.crterId},
+            #{item.crterName},
+            #{item.crteTime}
+            )
+        </foreach>
+
+    </insert>
+
+    <update id="updateExpertPhone" parameterType="com.wayhome.srpingbootmybatis.mbs.dto.FmsFixmedinsExpert">
+        update fixmedins_expert_info_d
+        <set>
+            PHONE = #{phone}
+        </set>
+        where EXPERT_CODE = #{expertCode} and FIXMEDINS_CODE = #{fixmedinsCode}
+    </update>
+
+
+
+    <select id="queryTldyExpertIdByMaJob" parameterType="com.wayhome.srpingbootmybatis.mbs.dto.FmsFixmedinsExpert"
+            resultType="com.wayhome.srpingbootmybatis.mbs.dto.FmsFixmedinsExpert">
+        select <include refid="BASE_COLUMN"/>
+        from fixmedins_expert_info_d
+        <where>
+            and FIXMEDINS_CODE != #{fixmedinsCode}
+            and DEPT_MAJOR = #{deptMajor}
+            and <![CDATA[HOSP_LV <= #{hospLv}]]>
+            and ASSIGN_FLAG = '1'
+            and VALI_FLAG = '1'
+            and AUDIT_STATUS = '1'
+                <choose>
+                    <when test="fixBlngAdmdvs == '130000'">
+                        AND FIX_BLNG_ADMDVS LIKE '13%'
+                    </when>
+                    <when test="fixBlngAdmdvs == '130100'">
+                        AND FIX_BLNG_ADMDVS LIKE '1301%' AND FIX_BLNG_ADMDVS != '130181'
+                    </when>
+                    <when test="fixBlngAdmdvs == '130200'">
+                        AND FIX_BLNG_ADMDVS LIKE '1302%'
+                    </when>
+                    <when test="fixBlngAdmdvs == '130300'">
+                        AND FIX_BLNG_ADMDVS LIKE '1303%'
+                    </when>
+                    <when test="fixBlngAdmdvs == '130400'">
+                        AND FIX_BLNG_ADMDVS LIKE '1304%'
+                    </when>
+                    <when test="fixBlngAdmdvs == '130500'">
+                        AND FIX_BLNG_ADMDVS LIKE '1305%'
+                    </when>
+                    <when test="fixBlngAdmdvs == '130600'">
+                        AND FIX_BLNG_ADMDVS LIKE '1306%' AND FIX_BLNG_ADMDVS != '130682'
+                    </when>
+                    <when test="fixBlngAdmdvs == '130700'">
+                        AND FIX_BLNG_ADMDVS LIKE '1307%'
+                    </when>
+                    <when test="fixBlngAdmdvs == '130800'">
+                        AND FIX_BLNG_ADMDVS LIKE '1308%'
+                    </when>
+                    <when test="fixBlngAdmdvs == '130900'">
+                        AND FIX_BLNG_ADMDVS LIKE '1309%'
+                    </when>
+                    <when test="fixBlngAdmdvs == '131000'">
+                        AND FIX_BLNG_ADMDVS LIKE '1310%'
+                    </when>
+                    <when test="fixBlngAdmdvs == '131100'">
+                        AND FIX_BLNG_ADMDVS LIKE '1311%'
+                    </when>
+                    <when test="fixBlngAdmdvs == '133100'">
+                        AND FIX_BLNG_ADMDVS LIKE '1331%'
+                    </when>
+                    <otherwise>
+                        AND FIX_BLNG_ADMDVS = #{fixBlngAdmdvs}
+                    </otherwise>
+                </choose>
+        </where>
+    </select>
+
+</mapper>
