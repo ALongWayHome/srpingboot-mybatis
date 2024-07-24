@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(value = "导入专家返回结果")
+@ApiModel(value = "导入返回结果")
 public class ImportExpertResult {
 
     @ApiModelProperty(value = "是否导入成功")

@@ -42,7 +42,7 @@ public class FixmedinsLvMappingServiceImpl implements FixmedinsLvMappingService 
             return ApiResult.success(Boolean.FALSE);
         }
         //测试完这个要注释掉
-        list = Collections.singletonList(list.get(0));
+//        list = Collections.singletonList(list.get(0));
         Boolean result = fixmedinsLvMappingBO.importMappingData(list);
         return ApiResult.success(result);
     }

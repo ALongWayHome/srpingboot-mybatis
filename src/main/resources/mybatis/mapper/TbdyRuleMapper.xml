@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wayhome.srpingbootmybatis.mbs.tblyrule.dao.TbdyRuleDao">
+
+    <insert id="batchInsertDipSetlAvgCostNew" parameterType="list">
+        insert into dip_setl_avg_cost_new_d
+        (MEDFEE_SUMAMT,
+        SETL_CNT,
+        AVG_AMT,
+        SETL_LV,
+        CLR_OPTINS,
+        GRP_DIAG_CODE,
+        GRP_DIAG_NAME,
+        OPRN_GRP_CODE,
+        OPRN_GRP_NAME,
+        ASST_LIST_CODE,
+        ASST_LIST_NAME,
+        SETL_YEAR,
+        VALI_FLAG,
+        CRTE_TIME,
+        UPDT_TIME
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.medfeeSumamt},
+            #{item.setlCnt},
+            #{item.avgAmt},
+            #{item.setlLv},
+            #{item.clrOptins},
+            #{item.grpDiagCode},
+            #{item.grpDiagName},
+            #{item.oprnGrpCode},
+            #{item.oprnGrpName},
+            #{item.asstListCode},
+            #{item.asstListName},
+            #{item.setlYear},
+            #{item.valiFlag},
+            #{item.crteTime},
+            #{item.updtTime}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="batchInsertDipSetlAvgDaysNew" parameterType="list">
+        insert into dip_setl_avg_days_new_d
+        (SUM_DAYS,
+        SETL_CNT,
+        AVG_DAYS,
+        SETL_LV,
+        CLR_OPTINS,
+        GRP_DIAG_CODE,
+        GRP_DIAG_NAME,
+        OPRN_GRP_CODE,
+        OPRN_GRP_NAME,
+        ASST_LIST_CODE,
+        ASST_LIST_NAME,
+        SETL_YEAR,
+        VALI_FLAG,
+        CRTE_TIME,
+        UPDT_TIME
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.sumDays},
+            #{item.setlCnt},
+            #{item.avgDays},
+            #{item.setlLv},
+            #{item.clrOptins},
+            #{item.grpDiagCode},
+            #{item.grpDiagName},
+            #{item.oprnGrpCode},
+            #{item.oprnGrpName},
+            #{item.asstListCode},
+            #{item.asstListName},
+            #{item.setlYear},
+            #{item.valiFlag},
+            #{item.crteTime},
+            #{item.updtTime}
+            )
+        </foreach>
+    </insert>
+
+
+
+
+    <insert id="batchInsertDrgSetlAvgCostNew" parameterType="list">
+        insert into drg_setl_avg_cost_new_d
+        (MEDFEE_SUMAMT,
+        SETL_CNT,
+        AVG_AMT,
+        SETL_LV,
+        CLR_OPTINS,
+        DRG_CODG,
+        DRG_NAME,
+        SETL_YEAR,
+        VALI_FLAG,
+        CRTE_TIME,
+        UPDT_TIME
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.medfeeSumamt},
+            #{item.setlCnt},
+            #{item.avgAmt},
+            #{item.setlLv},
+            #{item.clrOptins},
+            #{item.drgCodg},
+            #{item.drgName},
+            #{item.setlYear},
+            #{item.valiFlag},
+            #{item.crteTime},
+            #{item.updtTime}
+            )
+        </foreach>
+    </insert>
+
+
+    <insert id="batchInsertDrgSetlAvgDaysNew" parameterType="list">
+        insert into drg_setl_avg_days_new_d
+        (SUM_DAYS,
+        SETL_CNT,
+        AVG_DAYS,
+        SETL_LV,
+        CLR_OPTINS,
+        DRG_CODG,
+        DRG_NAME,
+        SETL_YEAR,
+        VALI_FLAG,
+        CRTE_TIME,
+        UPDT_TIME
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.sumDays},
+            #{item.setlCnt},
+            #{item.avgDays},
+            #{item.setlLv},
+            #{item.clrOptins},
+            #{item.drgCodg},
+            #{item.drgName},
+            #{item.setlYear},
+            #{item.valiFlag},
+            #{item.crteTime},
+            #{item.updtTime}
+            )
+        </foreach>
+    </insert>
+
+</mapper>

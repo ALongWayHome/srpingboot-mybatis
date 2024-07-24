@@ -13,6 +13,10 @@ logging:
     com.wayhome.srpingbootmybatis.mapper: debug
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 60MB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
 #    username: root
