@@ -56,4 +56,9 @@ public class JedisConfig {
     public Jedis testPlatformJedis(){
         return new Jedis("188.1.1.107", 6379, 5000);
     }
+
+    @Bean("testMobilePaymentJedis")
+    public Jedis testMobilePaymentJedis(){
+        return new Jedis("188.1.1.107", 6379, 5000);
+    }
 }

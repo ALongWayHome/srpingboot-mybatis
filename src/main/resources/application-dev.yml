@@ -49,3 +49,5 @@ thread:
     max-size : 20
     queue-capacity: 50
     name-prefix: thread-pool-
+
+conInsAdmdvsList:

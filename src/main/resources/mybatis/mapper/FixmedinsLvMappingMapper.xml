@@ -3,7 +3,7 @@
 <mapper namespace="com.wayhome.srpingbootmybatis.mbs.fixmedinslvmapping.dao.FixmedinsLvMappingDao">
 
     <insert id="batchInsertData" parameterType="list">
-        insert into fixmedins_lv_mapping_d
+        insert into fixmedins_lv_mapping_d_bak
             (FIXMEDINS_CODE,
              FIXMEDINS_NAME,
              FIX_BLNG_ADMDVS,

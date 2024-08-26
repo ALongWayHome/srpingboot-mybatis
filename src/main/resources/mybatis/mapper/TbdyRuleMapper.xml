@@ -3,7 +3,7 @@
 <mapper namespace="com.wayhome.srpingbootmybatis.mbs.tblyrule.dao.TbdyRuleDao">
 
     <insert id="batchInsertDipSetlAvgCostNew" parameterType="list">
-        insert into dip_setl_avg_cost_new_d
+        insert into dip_setl_avg_cost_new_d_bak
         (MEDFEE_SUMAMT,
         SETL_CNT,
         AVG_AMT,
@@ -42,7 +42,7 @@
     </insert>
 
     <insert id="batchInsertDipSetlAvgDaysNew" parameterType="list">
-        insert into dip_setl_avg_days_new_d
+        insert into dip_setl_avg_days_new_d_bak
         (SUM_DAYS,
         SETL_CNT,
         AVG_DAYS,
@@ -84,7 +84,7 @@
 
 
     <insert id="batchInsertDrgSetlAvgCostNew" parameterType="list">
-        insert into drg_setl_avg_cost_new_d
+        insert into drg_setl_avg_cost_new_d_bak
         (MEDFEE_SUMAMT,
         SETL_CNT,
         AVG_AMT,
@@ -116,7 +116,7 @@
 
 
     <insert id="batchInsertDrgSetlAvgDaysNew" parameterType="list">
-        insert into drg_setl_avg_days_new_d
+        insert into drg_setl_avg_days_new_d_bak
         (SUM_DAYS,
         SETL_CNT,
         AVG_DAYS,

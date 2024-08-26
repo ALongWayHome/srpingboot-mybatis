@@ -15,5 +15,10 @@ public interface FixmedinsExpertService {
      */
     ApiResult<ImportExpertResult> importExpertData(MultipartFile file) throws Exception;
 
+    /**
+     * 下载导入专家模版
+     *
+     * @throws Exception
+     */
     void downloadExpertTemplate() throws Exception;
 }
