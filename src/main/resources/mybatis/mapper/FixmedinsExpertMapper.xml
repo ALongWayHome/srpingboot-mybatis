@@ -19,6 +19,20 @@
                     AUDIT_MSG = #{auditMsg},
                 </otherwise>
             </choose>
+<!--            <choose>-->
+<!--                <when test="auditStep =='1'">-->
+<!--                    COUNTY_AUDIT = #{auditStatus},-->
+<!--                    COUNTY_AUDIT_MSG = #{auditMsg},-->
+<!--                </when>-->
+<!--                <when test="auditStep =='2'">-->
+<!--                    CITY_AUDIT = #{auditStatus},-->
+<!--                    CITY_AUDIT_MSG = #{auditMsg},-->
+<!--                </when>-->
+<!--                <otherwise>-->
+<!--                    AUDIT_STATUS = #{auditStatus},-->
+<!--                    AUDIT_MSG = #{auditMsg},-->
+<!--                </otherwise>-->
+<!--            </choose>-->
             AUDIT_STEP = #{nextAuditStep}
         </set>
         where EXPERT_CODE = #{expertCode} and AUDIT_STEP = #{auditStep} and VALI_FLAG = '1'

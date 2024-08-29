@@ -59,6 +59,6 @@ public class JedisConfig {
 
     @Bean("testMobilePaymentJedis")
     public Jedis testMobilePaymentJedis(){
-        return new Jedis("188.1.1.107", 6379, 5000);
+        return new Jedis("10.26.13.110", 7482, 5000);
     }
 }
